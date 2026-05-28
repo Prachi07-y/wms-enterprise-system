@@ -1,0 +1,489 @@
+<div class="flex bg-slate-100 min-h-screen">
+
+  <!-- Sidebar -->
+
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content -->
+
+  <div class="flex-1 flex flex-col">
+
+    <!-- Navbar -->
+
+    <app-navbar></app-navbar>
+
+    <!-- Content -->
+
+    <main class="p-8">
+
+      <!-- Header -->
+
+      <div class="flex items-center justify-between mb-8">
+
+        <div>
+
+          <h1 class="text-4xl font-bold text-slate-800">
+            Leave Management
+          </h1>
+
+          <p class="text-slate-500 mt-2">
+            Manage employee leave requests
+          </p>
+
+        </div>
+
+        <button
+          (click)="openModal()"
+          class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-2xl shadow-lg transition-all">
+
+          + Apply Leave
+
+        </button>
+
+      </div>
+
+      <!-- Stats Cards -->
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+        <!-- Pending -->
+
+        <div class="bg-white rounded-3xl shadow-lg p-6">
+
+          <div class="flex items-center justify-between">
+
+            <div>
+
+              <p class="text-slate-500 text-sm">
+                Pending Requests
+              </p>
+
+              <h2 class="text-4xl font-bold text-yellow-500 mt-3">
+
+                {{ pendingCount }}
+
+              </h2>
+
+            </div>
+
+            <div class="bg-yellow-100 p-4 rounded-2xl text-3xl">
+
+              ⏳
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Approved -->
+
+        <div class="bg-white rounded-3xl shadow-lg p-6">
+
+          <div class="flex items-center justify-between">
+
+            <div>
+
+              <p class="text-slate-500 text-sm">
+                Approved Leaves
+              </p>
+
+              <h2 class="text-4xl font-bold text-green-600 mt-3">
+
+                {{ approvedCount }}
+
+              </h2>
+
+            </div>
+
+            <div class="bg-green-100 p-4 rounded-2xl text-3xl">
+
+              ✅
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Rejected -->
+
+        <div class="bg-white rounded-3xl shadow-lg p-6">
+
+          <div class="flex items-center justify-between">
+
+            <div>
+
+              <p class="text-slate-500 text-sm">
+                Rejected Leaves
+              </p>
+
+              <h2 class="text-4xl font-bold text-red-500 mt-3">
+
+                {{ rejectedCount }}
+
+              </h2>
+
+            </div>
+
+            <div class="bg-red-100 p-4 rounded-2xl text-3xl">
+
+              ❌
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Search -->
+
+      <div class="mb-6">
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="searchLeave()"
+          placeholder="Search employees..."
+          class="w-full md:w-96 px-5 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white">
+
+      </div>
+
+      <!-- Leave Table -->
+
+      <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
+
+        <div class="p-6 border-b">
+
+          <h2 class="text-2xl font-bold text-slate-800">
+            Leave Requests
+          </h2>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full">
+
+            <thead class="bg-slate-100">
+
+              <tr>
+
+                <th class="text-left p-5">
+                  Employee
+                </th>
+
+                <th class="text-left p-5">
+                  Leave Type
+                </th>
+
+                <th class="text-left p-5">
+                  Start Date
+                </th>
+
+                <th class="text-left p-5">
+                  End Date
+                </th>
+
+                <th class="text-left p-5">
+                  Status
+                </th>
+
+                <th class="text-left p-5">
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr
+                *ngFor="let leave of filteredLeaves"
+                class="border-b hover:bg-slate-50 transition-all">
+
+                <!-- Employee -->
+
+                <td class="p-5 font-medium text-slate-700">
+
+                  {{ getEmployeeName(leave.employeeId) }}
+
+                </td>
+
+                <!-- Leave Type -->
+
+                <td class="p-5 text-slate-600">
+
+                  {{ leave.leaveType }}
+
+                </td>
+
+                <!-- Start Date -->
+
+                <td class="p-5 text-slate-600">
+
+                  {{ leave.startDate | date:'yyyy-MM-dd' }}
+
+                </td>
+
+                <!-- End Date -->
+
+                <td class="p-5 text-slate-600">
+
+                  {{ leave.endDate | date:'yyyy-MM-dd' }}
+
+                </td>
+
+                <!-- Status -->
+
+                <td class="p-5">
+
+                  <span
+                    class="px-4 py-2 rounded-full text-sm font-medium"
+
+                    [ngClass]="
+                      leave.status === 'Approved'
+                      ? 'bg-green-100 text-green-600'
+                      : leave.status === 'Rejected'
+                      ? 'bg-red-100 text-red-600'
+                      : 'bg-yellow-100 text-yellow-600'
+                    ">
+
+                    {{ leave.status }}
+
+                  </span>
+
+                </td>
+
+                <!-- Actions -->
+
+                <td class="p-5 flex gap-2">
+
+                  <!-- ONLY FOR PENDING -->
+
+                  <ng-container *ngIf="leave.status === 'Pending'">
+
+                    <button
+                      (click)="approveLeave(leave)"
+                      class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-xl">
+
+                      Approve
+
+                    </button>
+
+                    <button
+                      (click)="rejectLeave(leave)"
+                      class="bg-yellow-500 hover:bg-yellow-600 text-white px-4 py-2 rounded-xl">
+
+                      Reject
+
+                    </button>
+
+                  </ng-container>
+
+                  <!-- DELETE ALWAYS -->
+
+                  <button
+                    (click)="deleteLeave(leave)"
+                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl">
+
+                    Delete
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</div>
+
+<!-- Modal -->
+
+<div
+  *ngIf="showModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+  <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl p-8">
+
+    <!-- Header -->
+
+    <div class="flex items-center justify-between mb-8">
+
+      <div>
+
+        <h2 class="text-3xl font-bold text-slate-800">
+          Apply Leave
+        </h2>
+
+        <p class="text-slate-500 mt-1">
+          Submit leave request
+        </p>
+
+      </div>
+
+      <button
+        (click)="closeModal()"
+        class="text-slate-500 hover:text-red-500 text-2xl">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <!-- Form -->
+
+    <form
+      (ngSubmit)="applyLeave()"
+      class="space-y-6">
+
+      <!-- Employee -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+          Employee
+        </label>
+
+        <select
+          [(ngModel)]="leaveData.employeeId"
+          name="employeeId"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+          <option
+            *ngFor="let employee of employees"
+            [value]="employee.employeeId">
+
+            {{ employee.firstName }}
+            {{ employee.lastName }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- Leave Type -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+          Leave Type
+        </label>
+
+        <select
+          [(ngModel)]="leaveData.leaveType"
+          name="leaveType"
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+          <option value="Sick Leave">
+            Sick Leave
+          </option>
+
+          <option value="Casual Leave">
+            Casual Leave
+          </option>
+
+          <option value="Emergency Leave">
+            Emergency Leave
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- Start Date -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+          Start Date
+        </label>
+
+        <input
+          type="date"
+          [(ngModel)]="leaveData.startDate"
+          name="startDate"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- End Date -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+          End Date
+        </label>
+
+        <input
+          type="date"
+          [(ngModel)]="leaveData.endDate"
+          name="endDate"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- Reason -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+          Reason
+        </label>
+
+        <textarea
+          rows="4"
+          [(ngModel)]="leaveData.reason"
+          name="reason"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
+
+      </div>
+
+      <!-- Buttons -->
+
+      <div class="flex justify-end gap-4 pt-4">
+
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="px-6 py-3 rounded-2xl bg-slate-200 hover:bg-slate-300 transition-all">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="submit"
+          class="px-6 py-3 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg transition-all">
+
+          Submit Leave
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

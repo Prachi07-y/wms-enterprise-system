@@ -1,0 +1,446 @@
+<div class="flex bg-slate-100 min-h-screen">
+
+  <!-- SIDEBAR -->
+
+  <app-sidebar></app-sidebar>
+
+  <!-- MAIN CONTENT -->
+
+  <div class="flex-1 flex flex-col">
+
+    <!-- NAVBAR -->
+
+    <app-navbar></app-navbar>
+
+    <!-- PAGE CONTENT -->
+
+    <main class="p-8">
+
+      <!-- HEADER -->
+
+      <div class="flex items-center justify-between mb-8">
+
+        <div>
+
+          <h1 class="text-4xl font-bold text-slate-800">
+            Employees
+          </h1>
+
+          <p class="text-slate-500 mt-2">
+            Manage workforce employees
+          </p>
+
+        </div>
+
+        <button
+          (click)="openModal()"
+          class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-2xl shadow-lg transition-all">
+
+          + Add Employee
+
+        </button>
+
+      </div>
+
+      <!-- SEARCH -->
+
+      <div class="mb-6">
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="searchEmployee()"
+          placeholder="Search employees..."
+          class="w-full md:w-96 px-5 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white">
+
+      </div>
+
+      <!-- EMPLOYEE TABLE -->
+
+      <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full">
+
+            <!-- TABLE HEADER -->
+
+            <thead class="bg-slate-100">
+
+              <tr>
+
+                <th class="text-left p-5">
+                  ID
+                </th>
+
+                <th class="text-left p-5">
+                  Name
+                </th>
+
+                <th class="text-left p-5">
+                  Email
+                </th>
+
+                <th class="text-left p-5">
+                  Department
+                </th>
+
+                <th class="text-left p-5">
+                  Status
+                </th>
+
+                <th class="text-left p-5">
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <!-- TABLE BODY -->
+
+            <tbody>
+
+              <tr
+                *ngFor="let employee of filteredEmployees"
+                class="border-b hover:bg-slate-50 transition-all">
+
+                <!-- ID -->
+
+                <td class="p-5">
+
+                  {{ employee.employeeId }}
+
+                </td>
+
+                <!-- NAME -->
+
+                <td class="p-5 font-medium text-slate-700">
+
+                  {{ employee.firstName }}
+                  {{ employee.lastName }}
+
+                </td>
+
+                <!-- EMAIL -->
+
+                <td class="p-5">
+
+                  {{ employee.email }}
+
+                </td>
+
+                <!-- DEPARTMENT -->
+
+                <td class="p-5">
+
+                  {{ getDepartmentName(employee.departmentId) }}
+
+                </td>
+
+                <!-- STATUS -->
+
+                <td class="p-5">
+
+                  <span
+                    class="px-3 py-1 rounded-full text-sm"
+                    [ngClass]="employee.status === 'Active'
+                    ? 'bg-green-100 text-green-600'
+                    : 'bg-red-100 text-red-600'">
+
+                    {{ employee.status }}
+
+                  </span>
+
+                </td>
+
+                <!-- ACTIONS -->
+
+                <td class="p-5 flex gap-3">
+
+                  <button
+                    (click)="editEmployee(employee)"
+                    class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-xl transition-all">
+
+                    Edit
+
+                  </button>
+
+                  <button
+                    (click)="deleteEmployee(employee.employeeId)"
+                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl transition-all">
+
+                    Delete
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</div>
+
+<!-- MODAL -->
+
+<div
+  *ngIf="showModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+  <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl p-8">
+
+    <!-- MODAL HEADER -->
+
+    <div class="flex items-center justify-between mb-8">
+
+      <div>
+
+        <h2 class="text-3xl font-bold text-slate-800">
+
+          {{ isEditMode
+            ? 'Edit Employee'
+            : 'Add Employee' }}
+
+        </h2>
+
+        <p class="text-slate-500 mt-1">
+
+          Manage employee information
+
+        </p>
+
+      </div>
+
+      <button
+        (click)="closeModal()"
+        class="text-slate-500 hover:text-red-500 text-2xl">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <!-- FORM -->
+
+    <form
+      (ngSubmit)="addEmployee()"
+      class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <!-- FIRST NAME -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+
+          First Name
+
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="employeeData.firstName"
+          name="firstName"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- LAST NAME -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+
+          Last Name
+
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="employeeData.lastName"
+          name="lastName"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- EMAIL -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+
+          Email
+
+        </label>
+
+        <input
+          type="email"
+          [(ngModel)]="employeeData.email"
+          name="email"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- PHONE -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+
+          Phone Number
+
+        </label>
+
+        <input
+          type="text"
+          [(ngModel)]="employeeData.phoneNumber"
+          name="phoneNumber"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- DOB -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+
+          Date of Birth
+
+        </label>
+
+        <input
+          type="date"
+          [(ngModel)]="employeeData.dob"
+          name="dob"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- DOJ -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+
+          Date of Joining
+
+        </label>
+
+        <input
+          type="date"
+          [(ngModel)]="employeeData.doj"
+          name="doj"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- DEPARTMENT -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+
+          Department
+
+        </label>
+
+        <select
+          [(ngModel)]="employeeData.departmentId"
+          name="departmentId"
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+          <option [value]="1">
+            HR
+          </option>
+
+          <option [value]="2">
+            IT
+          </option>
+
+          <option [value]="3">
+            Finance
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- STATUS -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+
+          Status
+
+        </label>
+
+        <select
+          [(ngModel)]="employeeData.status"
+          name="status"
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+          <option value="Active">
+
+            Active
+
+          </option>
+
+          <option value="Inactive">
+
+            Inactive
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- BUTTONS -->
+
+      <div class="md:col-span-2 flex justify-end gap-4 mt-4">
+
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="px-6 py-3 rounded-2xl bg-slate-200 hover:bg-slate-300 transition-all">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="submit"
+          class="px-6 py-3 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg transition-all">
+
+          {{ isEditMode
+            ? 'Update Employee'
+            : 'Save Employee' }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

@@ -1,0 +1,136 @@
+<div class="h-screen w-64 bg-slate-900 text-white flex flex-col shadow-2xl">
+
+  <!-- Logo -->
+
+  <div class="p-6 border-b border-slate-700">
+
+    <h1 class="text-3xl font-bold tracking-wide text-indigo-400">
+      WMS
+    </h1>
+
+    <p class="text-slate-400 text-sm mt-1">
+
+      {{
+        authService.isAdmin()
+        ? 'Admin Dashboard'
+        : 'Employee Dashboard'
+      }}
+
+    </p>
+
+  </div>
+
+  <!-- Navigation -->
+
+  <nav class="flex-1 p-4 space-y-3">
+
+    <!-- Dashboard -->
+
+    <a
+      routerLink="/dashboard"
+      routerLinkActive="bg-indigo-500/20 text-indigo-300"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all">
+
+      <span>📊</span>
+      <span>Dashboard</span>
+
+    </a>
+
+    <!-- ADMIN ONLY -->
+
+    <ng-container *ngIf="authService.isAdmin()">
+
+      <!-- Employees -->
+
+      <a
+        routerLink="/employees"
+        routerLinkActive="bg-indigo-500/20 text-indigo-300"
+        class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all">
+
+        <span>👨‍💼</span>
+        <span>Employees</span>
+
+      </a>
+
+    </ng-container>
+
+    <!-- Attendance -->
+
+    <a
+      routerLink="/attendance"
+      routerLinkActive="bg-indigo-500/20 text-indigo-300"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all">
+
+      <span>📅</span>
+
+      <span>
+
+        {{
+          authService.isAdmin()
+          ? 'Attendance'
+          : 'My Attendance'
+        }}
+
+      </span>
+
+    </a>
+
+    <!-- Leaves -->
+
+    <a
+      routerLink="/leaves"
+      routerLinkActive="bg-indigo-500/20 text-indigo-300"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all">
+
+      <span>📄</span>
+
+      <span>
+
+        {{
+          authService.isAdmin()
+          ? 'Leaves'
+          : 'My Leaves'
+        }}
+
+      </span>
+
+    </a>
+
+    <!-- Projects -->
+
+    <a
+      routerLink="/projects"
+      routerLinkActive="bg-indigo-500/20 text-indigo-300"
+      class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-slate-800 transition-all">
+
+      <span>📁</span>
+
+      <span>
+
+        {{
+          authService.isAdmin()
+          ? 'Projects'
+          : 'My Projects'
+        }}
+
+      </span>
+
+    </a>
+
+  </nav>
+
+  <!-- Logout -->
+
+  <div class="p-4 border-t border-slate-700">
+
+    <button
+      (click)="logout()"
+      class="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-xl transition-all">
+
+      Logout
+
+    </button>
+
+  </div>
+
+</div>

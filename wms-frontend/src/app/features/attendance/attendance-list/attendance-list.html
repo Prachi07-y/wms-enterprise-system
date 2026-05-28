@@ -1,0 +1,401 @@
+<div class="flex bg-slate-100 min-h-screen">
+
+  <!-- Sidebar -->
+
+  <app-sidebar></app-sidebar>
+
+  <!-- Main Content -->
+
+  <div class="flex-1 flex flex-col">
+
+    <!-- Navbar -->
+
+    <app-navbar></app-navbar>
+
+    <!-- Content -->
+
+    <main class="p-8">
+
+      <!-- Header -->
+
+      <div class="flex items-center justify-between mb-8">
+
+        <div>
+
+          <h1 class="text-4xl font-bold text-slate-800">
+            Attendance
+          </h1>
+
+          <p class="text-slate-500 mt-2">
+            Employee attendance management
+          </p>
+
+        </div>
+
+        <button
+          (click)="openModal()"
+          class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-2xl shadow-lg transition-all">
+
+          + Mark Attendance
+
+        </button>
+
+      </div>
+
+      <!-- Summary Cards -->
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+
+        <!-- Present -->
+
+        <div class="bg-white rounded-3xl shadow-lg p-6">
+
+          <div class="flex items-center justify-between">
+
+            <div>
+
+              <p class="text-slate-500 text-sm">
+                Present Today
+              </p>
+
+              <h2 class="text-4xl font-bold text-green-600 mt-3">
+
+                {{ presentCount }}
+
+              </h2>
+
+            </div>
+
+            <div class="bg-green-100 p-4 rounded-2xl text-3xl">
+
+              ✅
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Absent -->
+
+        <div class="bg-white rounded-3xl shadow-lg p-6">
+
+          <div class="flex items-center justify-between">
+
+            <div>
+
+              <p class="text-slate-500 text-sm">
+                Absent Today
+              </p>
+
+              <h2 class="text-4xl font-bold text-red-500 mt-3">
+
+                {{ absentCount }}
+
+              </h2>
+
+            </div>
+
+            <div class="bg-red-100 p-4 rounded-2xl text-3xl">
+
+              ❌
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Rate -->
+
+        <div class="bg-white rounded-3xl shadow-lg p-6">
+
+          <div class="flex items-center justify-between">
+
+            <div>
+
+              <p class="text-slate-500 text-sm">
+                Attendance Rate
+              </p>
+
+              <h2 class="text-4xl font-bold text-indigo-600 mt-3">
+
+                {{ attendanceRate }}%
+
+              </h2>
+
+            </div>
+
+            <div class="bg-indigo-100 p-4 rounded-2xl text-3xl">
+
+              📊
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Search -->
+
+      <div class="mb-6">
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="searchAttendance()"
+          placeholder="Search attendance..."
+          class="w-full md:w-96 px-5 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white">
+
+      </div>
+
+      <!-- Attendance Table -->
+
+      <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
+
+        <div class="p-6 border-b">
+
+          <h2 class="text-2xl font-bold text-slate-800">
+            Attendance Records
+          </h2>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full">
+
+            <thead class="bg-slate-100">
+
+              <tr>
+
+                <th class="text-left p-5">
+                  Employee
+                </th>
+
+                <th class="text-left p-5">
+                  Date
+                </th>
+
+                <th class="text-left p-5">
+                  Status
+                </th>
+
+                <th class="text-left p-5">
+                  Actions
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr
+                *ngFor="let record of filteredAttendance"
+                class="border-b hover:bg-slate-50 transition-all">
+
+                <!-- Employee -->
+
+                <td class="p-5 font-medium text-slate-700">
+
+                  {{ getEmployeeName(record.employeeId) }}
+
+                </td>
+
+                <!-- Date -->
+
+                <td class="p-5 text-slate-600">
+
+                  {{ record.date | date:'yyyy-MM-dd' }}
+
+                </td>
+
+                <!-- Status -->
+
+                <td class="p-5">
+
+                  <span
+                    class="px-4 py-2 rounded-full text-sm font-medium"
+
+                    [ngClass]="
+                      record.status === 'Present'
+                      ? 'bg-green-100 text-green-600'
+                      : 'bg-red-100 text-red-600'
+                    ">
+
+                    {{ record.status }}
+
+                  </span>
+
+                </td>
+
+                <!-- Actions -->
+
+                <td class="p-5">
+
+                  <button
+                    (click)="deleteAttendance(record)"
+                    class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl">
+
+                    Delete
+
+                  </button>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</div>
+
+<!-- Modal -->
+
+<div
+  *ngIf="showModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+  <div class="bg-white w-full max-w-xl rounded-3xl shadow-2xl p-8">
+
+    <!-- Header -->
+
+    <div class="flex items-center justify-between mb-8">
+
+      <div>
+
+        <h2 class="text-3xl font-bold text-slate-800">
+          Mark Attendance
+        </h2>
+
+        <p class="text-slate-500 mt-1">
+          Add employee attendance record
+        </p>
+
+      </div>
+
+      <button
+        (click)="closeModal()"
+        class="text-slate-500 hover:text-red-500 text-2xl">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <!-- Form -->
+
+    <form
+      (ngSubmit)="addAttendance()"
+      class="space-y-6">
+
+      <!-- Employee -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+          Employee
+        </label>
+
+        <select
+          [(ngModel)]="attendanceData.employeeId"
+          name="employeeId"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+          <option
+            *ngFor="let employee of employees"
+            [value]="employee.employeeId">
+
+            {{ employee.firstName }}
+            {{ employee.lastName }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- Date -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+          Date
+        </label>
+
+        <input
+          type="date"
+          [(ngModel)]="attendanceData.date"
+          name="date"
+          required
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+      </div>
+
+      <!-- Status -->
+
+      <div>
+
+        <label class="block mb-2 text-sm text-slate-600">
+          Status
+        </label>
+
+        <select
+          [(ngModel)]="attendanceData.status"
+          name="status"
+          class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+
+          <option value="Present">
+            Present
+          </option>
+
+          <option value="Absent">
+            Absent
+          </option>
+
+        </select>
+
+      </div>
+
+      <!-- Buttons -->
+
+      <div class="flex justify-end gap-4 pt-4">
+
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="px-6 py-3 rounded-2xl bg-slate-200 hover:bg-slate-300 transition-all">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="submit"
+          class="px-6 py-3 rounded-2xl bg-indigo-500 hover:bg-indigo-600 text-white shadow-lg transition-all">
+
+          Save Attendance
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

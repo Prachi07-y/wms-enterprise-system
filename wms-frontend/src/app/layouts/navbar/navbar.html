@@ -1,0 +1,52 @@
+<div class="h-20 bg-white shadow-md flex items-center justify-between px-8">
+
+  <div>
+
+    <h2 class="text-2xl font-bold text-slate-800">
+
+      Dashboard
+
+    </h2>
+
+    <p class="text-slate-500 text-sm">
+
+      Welcome back
+
+      {{ authService.getUsername() }}
+
+      👋
+
+    </p>
+
+  </div>
+
+  <div class="flex items-center gap-4">
+
+    <div class="text-right">
+
+      <p class="font-semibold text-slate-700">
+
+        {{ employeeName || authService.getUsername() }}
+
+      </p>
+
+      <p class="text-sm text-slate-500">
+
+        {{ authService.getRole() }}
+
+      </p>
+
+    </div>
+
+    <div
+      class="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-lg">
+
+     {{ (employeeName || authService.getUsername())
+    .charAt(0)
+    .toUpperCase() }}
+
+    </div>
+
+  </div>
+
+</div>
