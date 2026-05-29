@@ -46,7 +46,10 @@ namespace WMS.API.Controllers
         {
             _service.DeleteEmployee(id);
 
-            return Ok("Employee deleted successfully");
+            return Ok(new
+            {
+                message = "Employee deleted successfully"
+            });
         }
 
         [HttpGet("search/name/{name}")]
