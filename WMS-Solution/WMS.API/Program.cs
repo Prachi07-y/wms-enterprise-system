@@ -112,9 +112,12 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowAngular",
         policy =>
         {
-            policy.WithOrigins("http://localhost:4201")
-                  .AllowAnyHeader()
-                  .AllowAnyMethod();
+            policy.WithOrigins(
+                "http://localhost:4201",
+                "https://wms-frontend-prachi-anf3h3fjfqhna4hw.southeastasia-01.azurewebsites.net"
+            )
+            .AllowAnyHeader()
+            .AllowAnyMethod();
         });
 });
 

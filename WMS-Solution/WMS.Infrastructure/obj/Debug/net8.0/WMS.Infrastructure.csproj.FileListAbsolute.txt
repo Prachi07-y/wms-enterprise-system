@@ -17,3 +17,4 @@ C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.Infrastructure\obj\Debug\ne
 C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.Infrastructure\obj\Debug\net8.0\WMS.Infrastructure.pdb
 C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.Infrastructure\obj\Debug\net8.0\WMS.Infrastructure.genruntimeconfig.cache
 C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.Infrastructure\obj\Debug\net8.0\ref\WMS.Infrastructure.dll
+C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.Infrastructure\obj\Debug\net8.0\WMS.Infrastructure.sourcelink.json

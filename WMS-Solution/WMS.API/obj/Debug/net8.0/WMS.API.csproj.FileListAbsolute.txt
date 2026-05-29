@@ -152,3 +152,4 @@ C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.API\obj\Debug\net8.0\refint
 C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.API\obj\Debug\net8.0\WMS.API.pdb
 C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.API\obj\Debug\net8.0\WMS.API.genruntimeconfig.cache
 C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.API\obj\Debug\net8.0\ref\WMS.API.dll
+C:\Users\HP\OneDrive\Desktop\Sprint\WMS-Solution\WMS.API\obj\Debug\net8.0\WMS.API.sourcelink.json
