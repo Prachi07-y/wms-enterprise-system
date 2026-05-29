@@ -59,19 +59,14 @@ implements OnInit {
 
   completedProjects = 0;
 
-  projectData: any = {
-
-    projectId: 0,
-
-    projectName: '',
-
-    manager: '',
-
-    deadline: '',
-
-    status: 'Pending'
-
-  };
+projectData = {
+  projectId: 0,
+  projectName: '',
+  manager: '',
+  startDate: '',
+  endDate: '',
+  status: 'Pending'
+};
 
   constructor(
 
@@ -353,17 +348,18 @@ implements OnInit {
 
             this.projectData = {
 
-              projectId: 0,
+  projectId: 0,
 
-              projectName: '',
+  projectName: '',
 
-              manager: '',
+  manager: '',
+   startDate: '',
 
-              deadline: '',
+  endDate: '',
 
-              status: 'Pending'
+  status: 'Pending'
 
-            };
+};
 
             this.cdr.detectChanges();
 
@@ -440,11 +436,12 @@ implements OnInit {
 
       manager:
         project.manager,
+        startDate:
+        project.startDate,
 
-      deadline:
-        project.deadline
-          ?.split('T')[0],
-
+      endDate:
+  project.endDate
+    ?.split('T')[0],
       status:
         project.status
 

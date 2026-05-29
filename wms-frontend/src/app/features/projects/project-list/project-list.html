@@ -221,7 +221,7 @@
 
                 <td class="p-5 text-slate-600">
 
-                  {{ project.deadline }}
+                  {{ project.endDate | date:'dd-MM-yyyy' }}
 
                 </td>
 
@@ -357,6 +357,18 @@
           class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
 
       </div>
+      <div>
+  <label class="block mb-2 text-sm text-slate-600">
+    Start Date
+  </label>
+
+  <input
+    type="date"
+    [(ngModel)]="projectData.startDate"
+    name="startDate"
+    required
+    class="w-full px-4 py-3 rounded-2xl border border-slate-300">
+</div>
 
       <!-- Deadline -->
 
@@ -368,8 +380,8 @@
 
         <input
           type="date"
-          [(ngModel)]="projectData.deadline"
-          name="deadline"
+         [(ngModel)]="projectData.endDate"
+         name="endDate"
           required
           class="w-full px-4 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500">
 

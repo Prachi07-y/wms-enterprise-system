@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { environment } from '../../environments/environments';
 import {
   HttpClient
 } from '@angular/common/http';
@@ -12,8 +12,8 @@ import { Observable } from 'rxjs';
 
 export class LeaveService {
 
-  private apiUrl =
-    'https://localhost:7299/api/Leave';
+ private apiUrl =
+  `${environment.apiUrl}/Leave`;
 
   constructor(
     private http: HttpClient

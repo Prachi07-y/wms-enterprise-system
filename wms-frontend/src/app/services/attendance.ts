@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environments';
 
 import {
   HttpClient
@@ -13,7 +14,7 @@ import { Observable } from 'rxjs';
 export class AttendanceService {
 
   private apiUrl =
-    'https://localhost:7299/api/Attendance';
+  `${environment.apiUrl}/Attendance`;
 
   constructor(
     private http: HttpClient

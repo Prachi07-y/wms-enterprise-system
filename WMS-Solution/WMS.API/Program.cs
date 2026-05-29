@@ -120,17 +120,20 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+// Enable Swagger in Azure and Local
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
 app.UseCors("AllowAngular");
+
 app.UseAuthentication();
+
 app.UseMiddleware<ExceptionMiddleware>();
+
 app.UseAuthorization();
 
 app.MapControllers();

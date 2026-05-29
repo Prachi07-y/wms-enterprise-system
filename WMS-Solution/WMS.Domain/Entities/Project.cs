@@ -10,6 +10,8 @@ namespace WMS.Domain.Entities
         [StringLength(100)]
         public string ProjectName { get; set; }
 
+        public string? Manager { get; set; }
+
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }

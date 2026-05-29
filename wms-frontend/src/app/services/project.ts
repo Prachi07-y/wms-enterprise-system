@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { environment } from '../../environments/environments';
 import {
   HttpClient
 } from '@angular/common/http';
@@ -12,8 +12,7 @@ import { Observable } from 'rxjs';
 
 export class ProjectService {
 
-  private apiUrl =
-    'https://localhost:7299/api/Project';
+  private apiUrl = `${environment.apiUrl}/Project`;
 
   constructor(
     private http: HttpClient
