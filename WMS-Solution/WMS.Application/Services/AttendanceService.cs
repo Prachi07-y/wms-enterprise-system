@@ -42,18 +42,27 @@ namespace WMS.Application.Services
                 _repository.DeleteAttendance(attendance);
             }
         }
+
+        // CHECK IN
+
         public void CheckIn(int employeeId)
         {
             var attendance = new Attendance
             {
                 EmployeeId = employeeId,
                 Date = DateTime.Today,
-                CheckIn = DateTime.Now,
+
+                // IST Time
+                CheckIn = DateTime.UtcNow.AddHours(5.5),
+
                 Status = "Present"
             };
 
             _repository.AddAttendance(attendance);
         }
+
+        // CHECK OUT
+
         public void CheckOut(int employeeId)
         {
             var attendance = _repository
@@ -64,12 +73,20 @@ namespace WMS.Application.Services
 
             if (attendance != null)
             {
-                attendance.CheckOut = DateTime.Now;
+                // IST Time
+                attendance.CheckOut =
+                    DateTime.UtcNow.AddHours(5.5);
 
                 _repository.UpdateAttendance(attendance);
             }
         }
-        public object GetMonthlyAttendance(int employeeId, int year, int month)
+
+        // MONTHLY ATTENDANCE REPORT
+
+        public object GetMonthlyAttendance(
+            int employeeId,
+            int year,
+            int month)
         {
             var records = _repository
                 .GetAllAttendance()
@@ -79,15 +96,22 @@ namespace WMS.Application.Services
                     a.Date.Month == month)
                 .ToList();
 
-            var totalPresent = records.Count(a => a.Status == "Present");
+            var totalPresent =
+                records.Count(a =>
+                    a.Status == "Present");
 
-            var totalAbsent = records.Count(a => a.Status == "Absent");
+            var totalAbsent =
+                records.Count(a =>
+                    a.Status == "Absent");
 
-            var totalDays = records.Count;
+            var totalDays =
+                records.Count;
 
             var attendancePercentage =
-                totalDays == 0 ? 0 :
-                (double)totalPresent / totalDays * 100;
+                totalDays == 0
+                ? 0
+                : (double)totalPresent /
+                  totalDays * 100;
 
             return new
             {
@@ -96,10 +120,13 @@ namespace WMS.Application.Services
                 Month = month,
                 TotalPresent = totalPresent,
                 TotalAbsent = totalAbsent,
-                AttendancePercentage = Math.Round(attendancePercentage, 2),
+                AttendancePercentage =
+                    Math.Round(
+                        attendancePercentage,
+                        2),
+
                 Records = records
             };
         }
     }
-
 }
