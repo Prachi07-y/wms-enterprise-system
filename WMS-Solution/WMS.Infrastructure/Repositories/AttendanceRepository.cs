@@ -2,6 +2,7 @@ using WMS.Application.Interfaces;
 using WMS.Domain.Entities;
 using WMS.Infrastructure.Data;
 
+
 namespace WMS.Infrastructure.Repositories
 {
     public class AttendanceRepository : IAttendanceRepository

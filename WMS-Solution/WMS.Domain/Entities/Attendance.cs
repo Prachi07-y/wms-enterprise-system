@@ -13,7 +13,7 @@ namespace WMS.Domain.Entities
         public DateTime Date { get; set; }
 
         [Required]
-        public DateTime CheckIn { get; set; }
+        public DateTime? CheckIn { get; set; }
 
         public DateTime CheckOut { get; set; }
 

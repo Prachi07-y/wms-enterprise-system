@@ -6,19 +6,25 @@ namespace WMS.Infrastructure.Data
     public class WMSDbContext : DbContext
     {
         public WMSDbContext(DbContextOptions<WMSDbContext> options)
-            : base(options)
+    : base(options)
         {
+            Console.WriteLine("===== DB CONNECTION =====");
+            Console.WriteLine(Database.GetDbConnection().ConnectionString);
+            Console.WriteLine("=========================");
         }
 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Announcement> Announcements { get; set; }
 
         public DbSet<Attendance> Attendances { get; set; }
         public DbSet<Leave> Leaves { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Client> Clients { get; set; }
         public DbSet<EmployeeProjectAllocation> EmployeeProjectAllocations { get; set; }
+       
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

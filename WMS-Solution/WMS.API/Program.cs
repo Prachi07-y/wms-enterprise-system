@@ -68,6 +68,13 @@ builder.Services.AddScoped<IProjectService, ProjectService>();
 builder.Services.AddScoped<IEmployeeProjectAllocationRepository, EmployeeProjectAllocationRepository>();
 
 builder.Services.AddScoped<IEmployeeProjectAllocationService, EmployeeProjectAllocationService>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+
+builder.Services.AddScoped<IClientService, ClientService>();
+
+builder.Services.AddScoped<IAnnouncementRepository, AnnouncementRepository>();
+
+builder.Services.AddScoped<IAnnouncementService, AnnouncementService>();
 
 builder.Services.AddDbContext<WMSDbContext>(options =>
     options.UseSqlServer(
@@ -113,6 +120,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(
+                "http://localhost:4200",
                 "http://localhost:4201",
                 "https://wms-frontend-prachi-anf3h3fjfqhna4hw.southeastasia-01.azurewebsites.net"
             )

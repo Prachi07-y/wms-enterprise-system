@@ -28,7 +28,7 @@ namespace WMS.API.Middleware
                 {
                     StatusCode = context.Response.StatusCode,
                     Message = "Internal Server Error",
-                    Detailed = ex.Message
+                    Detailed = ex.ToString()
                 };
 
                 var json = JsonSerializer.Serialize(response);

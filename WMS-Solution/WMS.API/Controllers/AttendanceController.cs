@@ -59,5 +59,32 @@ namespace WMS.API.Controllers
 
             return Ok();
         }
+        [HttpPost("checkin/{employeeId}")]
+        public IActionResult CheckIn(int employeeId)
+        {
+            _service.CheckIn(employeeId);
+
+            return Ok("Checked In Successfully");
+        }
+        [HttpPost("checkout/{employeeId}")]
+        public IActionResult CheckOut(int employeeId)
+        {
+            _service.CheckOut(employeeId);
+
+            return Ok("Checked Out Successfully");
+        }
+        [HttpGet("monthly/{employeeId}/{year}/{month}")]
+        public IActionResult GetMonthlyAttendance(
+     int employeeId,
+     int year,
+     int month)
+        {
+            return Ok(
+                _service.GetMonthlyAttendance(
+                    employeeId,
+                    year,
+                    month));
+        }
+
     }
 }
