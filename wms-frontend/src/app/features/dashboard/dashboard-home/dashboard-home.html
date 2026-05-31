@@ -32,131 +32,129 @@
 
       <!-- KPI Cards -->
 
-      <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10"></div>
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-10">
 
-        <!-- Total Employees -->
+  <!-- Total Employees -->
 
-        <div class="bg-white rounded-3xl shadow-lg p-6">
+  <div class="bg-white rounded-3xl shadow-lg p-6">
 
-          <div class="flex items-center justify-between">
+    <div class="flex items-center justify-between">
 
-            <div>
+      <div>
 
-              <p class="text-slate-500 text-sm">
-                Total Employees
-              </p>
+        <p class="text-slate-500 text-sm">
+          Total Employees
+        </p>
 
-              <h2 class="text-4xl font-bold mt-3 text-slate-800">
+        <h2 class="text-4xl font-bold mt-3 text-slate-800">
 
-                {{ totalEmployees }}
+          {{ totalEmployees }}
 
-              </h2>
+        </h2>
 
-            </div>
+      </div>
 
-            <div class="bg-indigo-100 p-4 rounded-2xl text-3xl">
+      <div class="bg-indigo-100 p-4 rounded-2xl text-3xl">
 
-              👨‍💼
+        👨‍💼
 
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- Active Employees -->
-
-        <div class="bg-white rounded-3xl shadow-lg p-6">
-
-          <div class="flex items-center justify-between">
-
-            <div>
-
-              <p class="text-slate-500 text-sm">
-                Active Employees
-              </p>
-
-              <h2 class="text-4xl font-bold mt-3 text-green-600">
-
-                {{ activeEmployees }}
-
-              </h2>
-
-            </div>
-
-            <div class="bg-green-100 p-4 rounded-2xl text-3xl">
-
-              ✅
-
-            </div>
-
-          </div>
-
-        </div>
-
-        <!-- Clients -->
-
-<div class="bg-white rounded-3xl shadow-lg p-6">
-
-  <div class="flex items-center justify-between">
-
-    <div>
-
-      <p class="text-slate-500 text-sm">
-        Clients
-      </p>
-
-      <h2 class="text-4xl font-bold mt-3 text-cyan-600">
-
-        {{ totalClients }}
-
-      </h2>
+      </div>
 
     </div>
 
-    <div class="bg-cyan-100 p-4 rounded-2xl text-3xl">
+  </div>
 
-      🤝
+  <!-- Active Employees -->
+
+  <div class="bg-white rounded-3xl shadow-lg p-6">
+
+    <div class="flex items-center justify-between">
+
+      <div>
+
+        <p class="text-slate-500 text-sm">
+          Active Employees
+        </p>
+
+        <h2 class="text-4xl font-bold mt-3 text-green-600">
+
+          {{ activeEmployees }}
+
+        </h2>
+
+      </div>
+
+      <div class="bg-green-100 p-4 rounded-2xl text-3xl">
+
+        ✅
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Clients -->
+
+  <div class="bg-white rounded-3xl shadow-lg p-6">
+
+    <div class="flex items-center justify-between">
+
+      <div>
+
+        <p class="text-slate-500 text-sm">
+          Clients
+        </p>
+
+        <h2 class="text-4xl font-bold mt-3 text-cyan-600">
+
+          {{ totalClients }}
+
+        </h2>
+
+      </div>
+
+      <div class="bg-cyan-100 p-4 rounded-2xl text-3xl">
+
+        🤝
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Projects -->
+
+  <div class="bg-white rounded-3xl shadow-lg p-6">
+
+    <div class="flex items-center justify-between">
+
+      <div>
+
+        <p class="text-slate-500 text-sm">
+          Projects
+        </p>
+
+        <h2 class="text-4xl font-bold mt-3 text-pink-500">
+
+          {{ totalProjects }}
+
+        </h2>
+
+      </div>
+
+      <div class="bg-pink-100 p-4 rounded-2xl text-3xl">
+
+        📁
+
+      </div>
 
     </div>
 
   </div>
 
 </div>
-
-        <!-- Projects -->
-
-        <div class="bg-white rounded-3xl shadow-lg p-6">
-
-          <div class="flex items-center justify-between">
-
-            <div>
-
-              <p class="text-slate-500 text-sm">
-                Projects
-              </p>
-
-              <h2 class="text-4xl font-bold mt-3 text-pink-500">
-
-                {{ totalProjects }}
-
-              </h2>
-
-            </div>
-
-            <div class="bg-pink-100 p-4 rounded-2xl text-3xl">
-
-              📁
-
-            </div>
-
-          </div>
-
-        </div>
-       
-
-  
-
       <!-- Chart + Announcements -->
 
       <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
