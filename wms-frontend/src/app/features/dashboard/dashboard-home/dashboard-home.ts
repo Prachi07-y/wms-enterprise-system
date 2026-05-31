@@ -350,91 +350,130 @@ loadAnnouncements() {
 
   // EDIT ANNOUNCEMENT
 
-  editAnnouncement(
-    announcement: any,
-    index: number
-  ) {
+ editAnnouncement(
+  announcement: any,
+  index: number
+) {
 
-    this.isEditAnnouncement =
-      true;
+  this.isEditAnnouncement =
+    true;
 
-    this.editingIndex = index;
+  this.editingIndex = index;
 
-    this.showAnnouncementModal =
-      true;
+  this.showAnnouncementModal =
+    true;
 
-    this.announcementData = {
+  this.announcementData = {
 
-      title:
-        announcement.title,
+    announcementId:
+      announcement.announcementId,
 
-      message:
-        announcement.message,
+    title:
+      announcement.title,
 
-      time:
-        announcement.time
+    message:
+      announcement.message,
 
-    };
+    createdBy:
+      announcement.createdBy,
 
-  }
+    createdOn:
+      announcement.createdOn,
+
+    isActive:
+      announcement.isActive
+
+  };
+
+}
 
   // ADD / UPDATE ANNOUNCEMENT
 
   addAnnouncement() {
 
-    if (
-      this.isEditAnnouncement
-    ) {
+  if (
+    this.isEditAnnouncement
+  ) {
 
-      this.announcements[
-        this.editingIndex
-      ] = {
+    this.announcementService
+      .updateAnnouncement(
+        this.announcementData
+      )
+      .subscribe({
 
-        ...this.announcementData
+        next: () => {
 
-      };
+          this.loadAnnouncements();
 
-    }
+          this.closeAnnouncementModal();
 
-    else {
+        },
 
-      this.announcements.unshift({
+        error: (err) => {
 
-        ...this.announcementData
+          console.log(err);
+
+        }
 
       });
 
-    }
+  }
 
-    this.cdr.detectChanges();
+  else {
 
-    this.closeAnnouncementModal();
+    this.announcementData.createdBy =
+      'Employee';
 
-    this.announcementData = {
+    this.announcementService
+      .addAnnouncement(
+        this.announcementData
+      )
+      .subscribe({
 
-      title: '',
+        next: () => {
 
-      message: '',
+          this.loadAnnouncements();
 
-      time: 'Today'
+          this.closeAnnouncementModal();
 
-    };
+        },
+
+        error: (err) => {
+
+          console.log(err);
+
+        }
+
+      });
 
   }
+
+}
 
   // DELETE ANNOUNCEMENT
 
-  deleteAnnouncement(
-    index: number
-  ) {
+ deleteAnnouncement(
+  id: number
+) {
 
-    this.announcements.splice(
-      index,
-      1
-    );
+  this.announcementService
+    .deleteAnnouncement(id)
+    .subscribe({
 
-    this.cdr.detectChanges();
+      next: () => {
 
-  }
+        this.loadAnnouncements();
+
+      },
+
+      error: (err) => {
+
+        console.log(err);
+
+      }
+
+    });
+
+}
 
 }
