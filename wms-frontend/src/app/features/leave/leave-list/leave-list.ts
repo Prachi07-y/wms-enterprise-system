@@ -277,17 +277,6 @@ implements OnInit {
 
     // AUTO SET EMPLOYEE ID
 
-    if (
-      this.authService.isEmployee()
-    ) {
-
-      this.leaveData.employeeId =
-
-        this.authService
-          .getEmployeeId();
-
-    }
-
     this.leaveService
       .addLeave(this.leaveData)
       .subscribe({
