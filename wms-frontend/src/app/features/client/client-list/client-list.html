@@ -1,0 +1,304 @@
+<div class="flex bg-slate-100 min-h-screen">
+
+  <app-sidebar></app-sidebar>
+
+  <div class="flex-1 flex flex-col">
+
+    <app-navbar></app-navbar>
+
+    <main class="p-8">
+
+      <!-- Header -->
+
+      <div class="flex items-center justify-between mb-8">
+
+        <div>
+
+          <h1 class="text-4xl font-bold text-slate-800">
+
+            Clients
+
+          </h1>
+
+          <p class="text-slate-500 mt-2">
+
+            Client Management
+
+          </p>
+
+        </div>
+
+        <button
+          (click)="openModal()"
+          class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-2xl shadow-lg">
+
+          + Add Client
+
+        </button>
+
+      </div>
+
+      <!-- Search -->
+
+      <div class="mb-6">
+
+        <input
+          type="text"
+          [(ngModel)]="searchText"
+          (input)="searchClient()"
+          placeholder="Search client..."
+          class="w-full md:w-96 px-5 py-3 rounded-2xl border border-slate-300 bg-white">
+
+      </div>
+
+      <!-- Table -->
+
+      <div class="bg-white rounded-3xl shadow-lg overflow-hidden">
+
+        <div class="p-6 border-b">
+
+          <h2 class="text-2xl font-bold">
+
+            Client List
+
+          </h2>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full">
+
+            <thead class="bg-slate-100">
+
+              <tr>
+
+                <th class="text-left p-5">
+
+                  Client Name
+
+                </th>
+
+                <th class="text-left p-5">
+
+                  Address
+
+                </th>
+
+                <th class="text-left p-5">
+
+                  Phone
+
+                </th>
+
+                <th class="text-left p-5">
+
+                  Location
+
+                </th>
+
+                <th class="text-left p-5">
+
+                  Status
+
+                </th>
+
+                <th class="text-left p-5">
+
+                  Actions
+
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody>
+
+              <tr
+                *ngFor="let client of filteredClients"
+                class="border-b hover:bg-slate-50">
+
+                <td class="p-5">
+
+                  {{ client.clientName }}
+
+                </td>
+
+                <td class="p-5">
+
+                  {{ client.clientAddress }}
+
+                </td>
+
+                <td class="p-5">
+
+                  {{ client.clientPhoneNumber }}
+
+                </td>
+
+                <td class="p-5">
+
+                  {{ client.clientLocation }}
+
+                </td>
+
+                <td class="p-5">
+
+                  <span
+                    class="px-4 py-2 rounded-full text-sm"
+
+                    [ngClass]="
+
+                      client.status
+
+                      ? 'bg-green-100 text-green-600'
+
+                      : 'bg-red-100 text-red-600'
+
+                    ">
+
+                    {{ client.status ? 'Active' : 'Inactive' }}
+
+                  </span>
+
+                </td>
+
+                <td class="p-5 flex gap-2">
+
+                  <button
+                    (click)="editClient(client)"
+                    class="bg-yellow-500 text-white px-3 py-2 rounded-xl">
+
+                    Edit
+
+                  </button>
+
+                  <button
+  *ngIf="authService.isAdmin()"
+  (click)="deleteClient(client.clientId)"
+  class="bg-red-500 text-white px-3 py-2 rounded-xl">
+
+  Delete
+
+</button>
+
+                </td>
+
+              </tr>
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </main>
+
+  </div>
+
+</div>
+
+<!-- MODAL -->
+
+<div
+  *ngIf="showModal"
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+
+  <div
+    class="bg-white w-full max-w-xl rounded-3xl shadow-2xl p-8">
+
+    <div class="flex justify-between mb-8">
+
+      <h2 class="text-3xl font-bold">
+
+        {{ isEditMode ? 'Edit Client' : 'Add Client' }}
+
+      </h2>
+
+      <button
+        (click)="closeModal()"
+        class="text-2xl">
+
+        ✕
+
+      </button>
+
+    </div>
+
+    <form
+      (ngSubmit)="isEditMode ? updateClient() : addClient()"
+      class="space-y-5">
+
+      <input
+        [(ngModel)]="clientData.clientName"
+        name="clientName"
+        placeholder="Client Name"
+        required
+        class="w-full p-3 border rounded-xl">
+
+      <input
+        [(ngModel)]="clientData.clientAddress"
+        name="clientAddress"
+        placeholder="Address"
+        class="w-full p-3 border rounded-xl">
+
+      <input
+        [(ngModel)]="clientData.clientPhoneNumber"
+        name="clientPhoneNumber"
+        placeholder="Phone Number"
+        class="w-full p-3 border rounded-xl">
+
+      <input
+        [(ngModel)]="clientData.clientLocation"
+        name="clientLocation"
+        placeholder="Location"
+        class="w-full p-3 border rounded-xl">
+
+      <select
+        [(ngModel)]="clientData.status"
+        name="status"
+        class="w-full p-3 border rounded-xl">
+
+        <option [ngValue]="true">
+
+          Active
+
+        </option>
+
+        <option [ngValue]="false">
+
+          Inactive
+
+        </option>
+
+      </select>
+
+      <div class="flex justify-end gap-4">
+
+        <button
+          type="button"
+          (click)="closeModal()"
+          class="px-6 py-3 bg-slate-200 rounded-xl">
+
+          Cancel
+
+        </button>
+
+        <button
+          type="submit"
+          class="px-6 py-3 bg-indigo-500 text-white rounded-xl">
+
+          {{ isEditMode ? 'Update' : 'Save' }}
+
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

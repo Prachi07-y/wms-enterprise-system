@@ -20,6 +20,8 @@ from './features/projects/project-list/project-list';
 
 import { authGuard }
 from './guards/auth-guard';
+import { ClientList }
+from './features/client/client-list/client-list';
 
 export const routes: Routes = [
 
@@ -87,6 +89,11 @@ export const routes: Routes = [
   {
     path: '**',
     redirectTo: 'login'
-  }
+  },
+  {
+  path: 'clients',
+  component: ClientList
+}
+  
 
 ];
