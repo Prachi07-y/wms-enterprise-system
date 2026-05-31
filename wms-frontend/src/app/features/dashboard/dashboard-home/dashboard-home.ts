@@ -27,6 +27,8 @@ from '../../../services/employee';
 
 import { ProjectService }
 from '../../../services/project';
+import { ClientService }
+from '../../../services/client';
 
 Chart.register(...registerables);
 
@@ -53,6 +55,7 @@ implements OnInit {
   totalDepartments = 3;
 
   totalProjects = 0;
+  totalClients = 0;
 
   chart: any;
 
@@ -115,6 +118,10 @@ implements OnInit {
     private projectService:
       ProjectService,
 
+    private clientService:
+      ClientService,
+
+
     private cdr:
       ChangeDetectorRef
 
@@ -125,6 +132,7 @@ implements OnInit {
     this.loadDashboardData();
 
     this.loadProjects();
+     this.loadClients();
 
   }
 
@@ -160,6 +168,32 @@ implements OnInit {
       });
 
   }
+  // LOAD CLIENTS
+
+loadClients() {
+
+  this.clientService
+    .getClients()
+    .subscribe({
+
+      next: (res: any[]) => {
+
+        this.totalClients =
+          res.length;
+
+        this.cdr.detectChanges();
+
+      },
+
+      error: (err: any) => {
+
+        console.log(err);
+
+      }
+
+    });
+
+}
 
   // LOAD DASHBOARD DATA
 
@@ -233,7 +267,8 @@ implements OnInit {
 
             'Departments',
 
-            'Projects'
+            'Projects',
+             'Clients'
 
           ],
 
@@ -252,7 +287,9 @@ implements OnInit {
 
                 this.totalDepartments,
 
-                this.totalProjects
+                this.totalProjects,
+                  this.totalClients
+
 
               ],
 
