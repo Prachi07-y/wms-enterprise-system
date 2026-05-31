@@ -126,23 +126,9 @@ implements OnInit {
 
           else {
 
-            const employeeId =
+  this.leaveRequests = res;
 
-              this.authService
-                .getEmployeeId();
-
-            this.leaveRequests =
-
-              res.filter(
-
-                (x: any) =>
-
-                  x.employeeId ===
-                  employeeId
-
-              );
-
-          }
+}
 
           this.filteredLeaves =
             this.leaveRequests;
