@@ -52,7 +52,6 @@ implements OnInit {
 
   activeEmployees = 0;
 
-  totalDepartments = 3;
 
   totalProjects = 0;
   totalClients = 0;
@@ -265,7 +264,7 @@ loadClients() {
 
             'Active',
 
-            'Departments',
+           
 
             'Projects',
              'Clients'
@@ -285,7 +284,7 @@ loadClients() {
 
                 this.activeEmployees,
 
-                this.totalDepartments,
+               
 
                 this.totalProjects,
                   this.totalClients
