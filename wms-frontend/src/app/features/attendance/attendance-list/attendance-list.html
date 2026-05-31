@@ -52,7 +52,7 @@
 
   <button
   *ngIf="authService.isAdmin()"
-  (click)="openAttendanceModal()">
+  (click)="showAttendanceModal = true"
   class="bg-indigo-500 text-white px-6 py-3 rounded-xl">
 
   + Mark Attendance
