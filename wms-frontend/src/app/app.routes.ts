@@ -83,17 +83,17 @@ export const routes: Routes = [
     component: ProjectList,
     canActivate: [authGuard]
   },
+  {
+  path: 'clients',
+  component: ClientList
+},
 
   // INVALID ROUTES
 
   {
     path: '**',
     redirectTo: 'login'
-  },
-  {
-  path: 'clients',
-  component: ClientList
-}
+  }
   
 
 ];
