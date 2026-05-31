@@ -26,6 +26,8 @@ from '../../../services/employee';
 
 import { AuthService }
 from '../../../services/auth';
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-attendance-list',
@@ -58,18 +60,29 @@ implements OnInit {
   absentCount = 0;
 
   attendanceRate = 0;
+  monthlyReport: any = null;
+
+selectedEmployeeId = 0;
+
+selectedYear = new Date().getFullYear();
+
+selectedMonth = new Date().getMonth() + 1;
 
   attendanceData: any = {
 
-    attendanceId: 0,
+  attendanceId: 0,
 
-    employeeId: 1,
+  employeeId: 1,
 
-    date: '',
+  date: '',
 
-    status: 'Present'
+  checkIn: '',
 
-  };
+  checkOut: '',
+
+  status: 'Present'
+
+};
 
   constructor(
 
@@ -113,30 +126,27 @@ implements OnInit {
 
             this.attendanceRecords =
               res;
+              this.attendanceRecords.forEach((x: any) => {
+
+  if (x.checkIn) {
+
+    x.checkIn = new Date(x.checkIn);
+
+  }
+
+  if (x.checkOut) {
+
+    x.checkOut = new Date(x.checkOut);
+
+  }
+
+});
 
           }
 
           // EMPLOYEE → ONLY OWN DATA
 
-          else {
-
-            const employeeId =
-
-              this.authService
-                .getEmployeeId();
-
-            this.attendanceRecords =
-
-              res.filter(
-
-                (x: any) =>
-
-                  x.employeeId ===
-                  employeeId
-
-              );
-
-          }
+          this.attendanceRecords = res;
 
           this.filteredAttendance =
             this.attendanceRecords;
@@ -168,6 +178,12 @@ implements OnInit {
         next: (res: any) => {
 
           this.employees = res;
+          if (res.length > 0) {
+
+  this.selectedEmployeeId =
+    res[0].employeeId;
+
+}
 
           this.cdr.detectChanges();
 
@@ -186,28 +202,27 @@ implements OnInit {
   // GET EMPLOYEE NAME
 
   getEmployeeName(
-    employeeId: number
-  ): string {
+  employeeId: number
+): string {
 
-    const employee =
+  const employee =
 
-      this.employees.find(
+    this.employees.find(
 
-        (x: any) =>
+      (x: any) =>
 
-          x.employeeId ===
-          employeeId
+        Number(x.employeeId) ===
+        Number(employeeId)
 
-      );
+    );
 
-    return employee
+  return employee
 
-      ? `${employee.firstName}
-         ${employee.lastName}`
+    ? `${employee.firstName} ${employee.lastName}`
 
-      : 'Unknown Employee';
+    : 'Unknown Employee';
 
-  }
+}
 
   // CALCULATE STATS
 
@@ -426,5 +441,221 @@ implements OnInit {
       });
 
   }
+  loadMonthlyAttendance() {
+
+  this.attendanceService
+    .getMonthlyAttendance(
+      this.selectedEmployeeId,
+      this.selectedYear,
+      this.selectedMonth
+    )
+    .subscribe({
+
+      next: (res: any) => {
+
+        this.monthlyReport = res;
+
+        this.cdr.detectChanges();
+
+      },
+
+      error: (err: any) => {
+
+        console.log(err);
+
+        Swal.fire(
+          'Error',
+          'Failed to load monthly report.',
+          'error'
+        );
+
+      }
+
+    });
+
+}
+downloadPdf() {
+
+  if (!this.monthlyReport) {
+
+    Swal.fire(
+      'Warning',
+      'Load a monthly report first.',
+      'warning'
+    );
+
+    return;
+
+  }
+
+  const doc = new jsPDF();
+
+  const employee = this.employees.find(
+  (e: any) =>
+    Number(e.employeeId) ===
+    Number(this.selectedEmployeeId)
+);
+
+const employeeName = employee
+  ? `${employee.firstName} ${employee.lastName}`
+  : 'Unknown Employee';
+
+  doc.setFontSize(18);
+
+  doc.text(
+    'Monthly Attendance Report',
+    14,
+    20
+  );
+
+  doc.setFontSize(12);
+
+  doc.text(
+    `Employee: ${employeeName}`,
+    14,
+    35
+  );
+
+  doc.text(
+    `Year: ${this.selectedYear}`,
+    14,
+    45
+  );
+
+  doc.text(
+    `Month: ${this.selectedMonth}`,
+    14,
+    55
+  );
+
+  doc.text(
+    `Present Days: ${this.monthlyReport.totalPresent}`,
+    14,
+    65
+  );
+
+  doc.text(
+    `Absent Days: ${this.monthlyReport.totalAbsent}`,
+    14,
+    75
+  );
+
+  doc.text(
+    `Attendance Percentage: ${this.monthlyReport.attendancePercentage}%`,
+    14,
+    85
+  );
+
+  autoTable(doc, {
+
+    startY: 95,
+
+    head: [[
+      'Date',
+      'Check In',
+      'Check Out',
+      'Status'
+    ]],
+
+    body: this.monthlyReport.records.map(
+      (record: any) => [
+
+        new Date(record.date)
+          .toLocaleDateString(),
+
+        record.checkIn
+          ? new Date(record.checkIn)
+              .toLocaleTimeString()
+          : '-',
+
+        record.checkOut
+          ? new Date(record.checkOut)
+              .toLocaleTimeString()
+          : '-',
+
+        record.status
+
+      ]
+    )
+
+  });
+
+  doc.save(
+    `Attendance_Report_${employeeName}.pdf`
+  );
+
+}
+checkIn() {
+
+  const employeeId =
+    this.selectedEmployeeId;
+
+  this.attendanceService
+    .checkIn(employeeId)
+    .subscribe({
+
+      next: () => {
+
+        Swal.fire(
+          'Success',
+          'Checked In Successfully',
+          'success'
+        );
+
+        this.getAttendance();
+
+      },
+
+      error: (err: any) => {
+
+        console.log(err);
+
+        Swal.fire(
+          'Error',
+          'Check In Failed',
+          'error'
+        );
+
+      }
+
+    });
+
+}
+checkOut() {
+
+  const employeeId =
+    this.selectedEmployeeId;
+
+  this.attendanceService
+    .checkOut(employeeId)
+    .subscribe({
+
+      next: () => {
+
+        Swal.fire(
+          'Success',
+          'Checked Out Successfully',
+          'success'
+        );
+
+        this.getAttendance();
+
+      },
+
+      error: (err: any) => {
+
+        console.log(err);
+
+        Swal.fire(
+          'Error',
+          'Check Out Failed',
+          'error'
+        );
+
+      }
+
+    });
+
+}
 
 }

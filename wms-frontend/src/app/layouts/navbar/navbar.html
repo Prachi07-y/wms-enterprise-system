@@ -10,11 +10,7 @@
 
     <p class="text-slate-500 text-sm">
 
-      Welcome back
-
-      {{ authService.getUsername() }}
-
-      👋
+      Welcome {{ authService.getRole() }} 👋
 
     </p>
 
@@ -26,13 +22,13 @@
 
       <p class="font-semibold text-slate-700">
 
-        {{ employeeName || authService.getUsername() }}
+        {{ authService.getRole() }}
 
       </p>
 
       <p class="text-sm text-slate-500">
 
-        {{ authService.getRole() }}
+        Workforce Management System
 
       </p>
 
@@ -41,9 +37,7 @@
     <div
       class="w-12 h-12 rounded-full bg-indigo-500 flex items-center justify-center text-white font-bold text-lg">
 
-     {{ (employeeName || authService.getUsername())
-    .charAt(0)
-    .toUpperCase() }}
+      {{ authService.getRole().charAt(0).toUpperCase() }}
 
     </div>
 

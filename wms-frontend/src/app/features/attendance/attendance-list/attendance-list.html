@@ -32,13 +32,33 @@
 
         </div>
 
-        <button
-          (click)="openModal()"
-          class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-2xl shadow-lg transition-all">
+        <div class="flex gap-3">
 
-          + Mark Attendance
+  <button
+    (click)="checkIn()"
+    class="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-2xl shadow-lg">
 
-        </button>
+    Check In
+
+  </button>
+
+  <button
+    (click)="checkOut()"
+    class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-2xl shadow-lg">
+
+    Check Out
+
+  </button>
+
+  <button
+    (click)="openModal()"
+    class="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-2xl shadow-lg">
+
+    + Mark Attendance
+
+  </button>
+
+</div>
 
       </div>
 
@@ -150,6 +170,82 @@
           class="w-full md:w-96 px-5 py-3 rounded-2xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 shadow-sm bg-white">
 
       </div>
+      <!-- Monthly Attendance Report -->
+
+<div class="bg-white rounded-3xl shadow-lg p-6 mb-8">
+
+  <h2 class="text-2xl font-bold mb-4">
+    Monthly Attendance Report
+  </h2>
+
+  <div class="grid md:grid-cols-4 gap-4">
+
+    <select
+  [(ngModel)]="selectedEmployeeId"
+  class="border p-3 rounded-xl">
+
+  <option
+  *ngFor="let employee of employees"
+  [ngValue]="employee.employeeId">
+
+  {{ employee.firstName }}
+  {{ employee.lastName }}
+
+</option>
+
+</select>
+
+    <input
+      type="number"
+      [(ngModel)]="selectedYear"
+      placeholder="Year"
+      class="border p-3 rounded-xl">
+
+    <input
+      type="number"
+      [(ngModel)]="selectedMonth"
+      placeholder="Month"
+      class="border p-3 rounded-xl">
+
+    <button
+      (click)="loadMonthlyAttendance()"
+      class="bg-indigo-500 text-white rounded-xl">
+
+      Load Report
+
+    </button>
+    <button
+  (click)="downloadPdf()"
+  class="bg-green-500 text-white rounded-xl px-4 py-3">
+
+  Download PDF
+
+</button>
+
+  </div>
+
+  <div
+    *ngIf="monthlyReport"
+    class="mt-6">
+
+    <p>
+      <strong>Present Days:</strong>
+      {{ monthlyReport.totalPresent }}
+    </p>
+
+    <p>
+      <strong>Absent Days:</strong>
+      {{ monthlyReport.totalAbsent }}
+    </p>
+
+    <p>
+      <strong>Attendance %:</strong>
+      {{ monthlyReport.attendancePercentage }}
+    </p>
+
+  </div>
+
+</div>
 
       <!-- Attendance Table -->
 
@@ -171,21 +267,29 @@
 
               <tr>
 
-                <th class="text-left p-5">
-                  Employee
-                </th>
+               <th class="text-left p-5">
+  Employee
+</th>
 
-                <th class="text-left p-5">
-                  Date
-                </th>
+<th class="text-left p-5">
+  Date
+</th>
 
-                <th class="text-left p-5">
-                  Status
-                </th>
+<th class="text-left p-5">
+  Check In
+</th>
 
-                <th class="text-left p-5">
-                  Actions
-                </th>
+<th class="text-left p-5">
+  Check Out
+</th>
+
+<th class="text-left p-5">
+  Status
+</th>
+
+<th class="text-left p-5">
+  Actions
+</th>
 
               </tr>
 
@@ -212,6 +316,21 @@
                   {{ record.date | date:'yyyy-MM-dd' }}
 
                 </td>
+                <!-- Check In -->
+
+<td class="p-5 text-slate-600">
+
+  {{ record.checkIn | date:'HH:mm:ss' }}
+
+</td>
+
+<!-- Check Out -->
+
+<td class="p-5 text-slate-600">
+
+  {{ record.checkOut | date:'HH:mm:ss' }}
+
+</td>
 
                 <!-- Status -->
 
