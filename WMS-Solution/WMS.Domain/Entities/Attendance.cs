@@ -15,7 +15,7 @@ namespace WMS.Domain.Entities
         [Required]
         public DateTime? CheckIn { get; set; }
 
-        public DateTime CheckOut { get; set; }
+        public DateTime? CheckOut { get; set; }
 
         [Required]
         public string Status { get; set; }
