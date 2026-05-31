@@ -276,6 +276,7 @@ implements OnInit {
   applyLeave() {
 
     // AUTO SET EMPLOYEE ID
+    console.log(this.leaveData);
 
     this.leaveService
       .addLeave(this.leaveData)
