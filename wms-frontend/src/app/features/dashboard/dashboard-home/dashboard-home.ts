@@ -29,6 +29,8 @@ import { ProjectService }
 from '../../../services/project';
 import { ClientService }
 from '../../../services/client';
+import { AnnouncementService }
+from '../../../services/announcement';
 
 Chart.register(...registerables);
 
@@ -66,48 +68,25 @@ implements OnInit {
 
   editingIndex = -1;
 
-  announcementData = {
+ announcementData: any = {
 
-    title: '',
+  announcementId: 0,
 
-    message: '',
+  title: '',
 
-    time: 'Today'
+  message: '',
 
-  };
+  createdBy: '',
+
+  createdOn: new Date(),
+
+  isActive: true
+
+};
 
   // DYNAMIC ANNOUNCEMENTS
 
-  announcements = [
-
-    {
-      title: 'Team Meeting',
-
-      message:
-        'Weekly team sync scheduled at 4 PM.',
-
-      time: 'Today'
-    },
-
-    {
-      title: 'Leave Policy Update',
-
-      message:
-        'HR updated the leave approval guidelines.',
-
-      time: 'Yesterday'
-    },
-
-    {
-      title: 'New Project Launch',
-
-      message:
-        'Project Phoenix officially starts Monday.',
-
-      time: '2 Days Ago'
-    }
-
-  ];
+ announcements: any[] = [];
 
   constructor(
 
@@ -119,6 +98,8 @@ implements OnInit {
 
     private clientService:
       ClientService,
+      private announcementService:
+  AnnouncementService,
 
 
     private cdr:
@@ -132,6 +113,7 @@ implements OnInit {
 
     this.loadProjects();
      this.loadClients();
+     this.loadAnnouncements();
 
   }
 
@@ -179,6 +161,29 @@ loadClients() {
 
         this.totalClients =
           res.length;
+
+        this.cdr.detectChanges();
+
+      },
+
+      error: (err: any) => {
+
+        console.log(err);
+
+      }
+
+    });
+
+}
+loadAnnouncements() {
+
+  this.announcementService
+    .getAnnouncements()
+    .subscribe({
+
+      next: (res: any[]) => {
+
+        this.announcements = res;
 
         this.cdr.detectChanges();
 
