@@ -68,7 +68,7 @@ selectedYear = new Date().getFullYear();
 
 selectedMonth = new Date().getMonth() + 1;
 
-  attendanceData: any = {
+ attendanceData: any = {
 
   attendanceId: 0,
 
@@ -76,9 +76,9 @@ selectedMonth = new Date().getMonth() + 1;
 
   date: '',
 
-  checkIn: '',
+  checkIn: null,
 
-  checkOut: '',
+  checkOut: null,
 
   status: 'Present'
 
@@ -306,6 +306,13 @@ selectedMonth = new Date().getMonth() + 1;
           .getEmployeeId();
 
     }
+    if (!this.attendanceData.checkIn) {
+  delete this.attendanceData.checkIn;
+}
+
+if (!this.attendanceData.checkOut) {
+  delete this.attendanceData.checkOut;
+}
 
     this.attendanceService
       .addAttendance(
